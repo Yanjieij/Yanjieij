@@ -498,15 +498,80 @@ BookPtr = *Book1
 
 `切片 (slice)` 是对数组一个连续片段的引用，所以切片是一个引用类型，因此更类似于 C/C++ 中的数组类型，或者 Python 中的 list 类型
 
-- 切片是一个`长度可变`的数组
+- 切片是一个`长度可变`的数组(注意，内存角度下他们本质不同!)
 - 多个切片如果表示同一个数组的片段，它们可以共享数据，一个切片和相关数组的其他切片是共享存储的（相反，不同的数组总是代表不同的存储）
 - 因为切片是引用，所以它们不需要使用额外的内存并且比使用数组更有效率，所以在 Go 代码中切片比数组更常用
-- 切片在内存中的组织方式实际上是一个有 3 个域的结构体：指向相关数组的指针，切片长度以及切片容量
+- 切片在内存中的组织方式实际上是一个有 `3个域`的结构体：指向相关数组的`指针`，切片`长度`以及切片`容量`
 
 ```go
 
 ```
 
+
+### Map
+
+`map` 是一种内建的数据结构，用于存储键值对（key-value pairs）。map 的特点在于它的键（`key`）是唯一的，并且它允许你通过键快速查找、插入或删除相应的值（`value`）
+
+这种数据结构在内部通常使用散列表（hash table）实现
+
+- 未初始化的 map 变量的零值是 `nil`
+- 每个键在 map 中必须是唯一的，这意味着你不能有重复的键。
+- 键可以是任意可比较的类型（如 int, string, struct 等），而值可以是任何类型
+- 因为 map 是无序的，所以在遍历 map 时，元素的顺序可能每次都不相同
+
+```go
+// 用make创建map
+m := make(map[keyType]valueType)
+
+ages := map[string]int{"Alice": 30, "Bob": 25}
+
+// 索引取值，这是显然的
+var age int = ages["Alice"]
+
+// map取值可能出现key不存在的情况，可以使用如下语法
+age, exists := ages["Dave"]
+if exists {
+    fmt.Println(age)
+} else {
+    fmt.Println("Key not found")
+}
+
+// 循环遍历map，要注意这是无序的
+for key, value := range ages {
+	value = 0
+}
+
+// 删除key-value
+delete(ages,"Bob")
+
+// 实际上，map可以嵌套起来
+var nestedMap = make(map[int]map[string]int)
+nestedMap[0] = make(map[string]int)
+nestedMap[0]["Alice"] = 30
+nestedMap[1] = make(map[string]int)
+nestedMap[1]["Bob"] = 25
+
+// 或者map类型的切片
+// 但数组不行，这是底层决定的，切片只是指针，但数组要连续保存！
+items := make([]map[int]int, 5)
+	for i:= range items {
+		items[i] = make(map[int]int, 1)
+		items[i][1] = 2
+	}
+
+```
+
+### New函数
+
+`new` 是一个内置函数，用于为指定类型分配内存，并返回指向该类型零值的指针
+
+new 函数的主要用途是在运行时动态地为数据类型分配内存空间，这对于需要延迟初始化或控制资源分配的场景特别有用
+
+### Make函数
+
+`make` 是一个内建函数，主要用于初始化三个特殊的内建数据类型：切片（`slices`）、映射（`maps`）和通道（`channels`）
+
+这些数据结构需要动态分配内存，`make` 除了分配内存之外，还会初始化这些类型的内部状态，使它们可以直接使用
 
 ### 格式化输出
 
@@ -536,6 +601,7 @@ c := []byte(s)
 c[0] = 'c'
 s2 := string(c) // s2 == "cello"
 ```
+
 
 
 
