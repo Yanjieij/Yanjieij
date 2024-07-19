@@ -9,3 +9,6 @@ Embedding Model fine-tuning
 Neo4j 地图可视化
 - https://neo4j.com/labs/neodash/2.4/user-guide/reports/choropleth/
 - https://neo4j.com/labs/neodash/2.4/user-guide/reports/areamap/
+
+大模型抽象
+https://www.twosigma.com/articles/a-guide-to-large-language-model-abstractions/
